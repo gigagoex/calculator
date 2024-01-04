@@ -52,25 +52,31 @@ public class Calculator {
 */
         String s = "'Hello, World 123'";
         //remove whitespaces
-        int startOfCalculation = s.indexOf("'");
-        if (startOfCalculation > 0) {
-            System.err.println("Invalid input format!");
+        s = s.replaceAll(" ","");
+        if (!s.startsWith("'")) {
+            System.err.println("Invalid input format: Start with \"'\"");
         }
+        if (!s.endsWith("'")){
+            System.err.println("Invalid input format: End with \"'\"");
+        }
+        if (s.indexOf("'", 1) < s.length() - 1){
+            System.err.println("Invalid input format: Too many \"'\"");
+        }
+        System.out.println(s);
 
-
-
-        //remove whitespace
-        char[] chars = s.replaceAll("\s","").toCharArray();
+        char[] chars = s.replaceAll(" ","").toCharArray();
         //analyze string step by step
         String firstNumber = "";
-        String operator = "";
+        char operator;
         String secondNumber = "";
         for (char c : chars){
             if (c >= 48 && c <= 57 || c == 46){
                 firstNumber += c;
             } else if (c == '\''){
                 System.out.println(c);
-            } else continue;
+            } else if ((c == '+') || (c == '-') || (c == '*') || (c == '/')){
+                operator = c;
+            }else continue;
         }
         System.out.println(firstNumber);
     }
