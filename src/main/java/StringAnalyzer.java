@@ -77,12 +77,7 @@ public class StringAnalyzer {
             }
         }
         //System.out.println(firstNumber);
-        try{
-            this.firstNumber = Double.parseDouble(firstNumberString);
-            this.secondNumber = Double.parseDouble(secondNumberString);
-        } catch (Exception e){
-            throw e;
-        }
-
+        this.firstNumber = Double.parseDouble(firstNumberString);
+        this.secondNumber = Double.parseDouble(secondNumberString);
     }
 }
