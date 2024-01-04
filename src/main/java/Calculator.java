@@ -33,6 +33,8 @@
  * 6. Console output: result
  */
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 
 public class Calculator {
@@ -41,51 +43,14 @@ public class Calculator {
     }
     public Calculator(){
         Scanner in = new Scanner(System.in);
-        /*
+
         System.out.print("calc ");
         String line = reader(in);
-        if (line.contains("+")){
-            System.out.println(7);
-        } else {
-            System.out.println(line);
+        StringAnalyzer str = new StringAnalyzer(line);
+        System.out.println(str.getFirstNumber());
         }
-*/
-        String s = "'Hello, World 123'";
-        //remove whitespaces
-        s = s.replaceAll(" ","");
-        if (!s.startsWith("'")) {
-            System.err.println("Invalid input format: Start with \"'\"");
-        }
-        if (!s.endsWith("'")){
-            System.err.println("Invalid input format: End with \"'\"");
-        }
-        if (s.indexOf("'", 1) < s.length() - 1){
-            System.err.println("Invalid input format: Too many \"'\"");
-        }
-        System.out.println(s);
-
-        char[] chars = s.replaceAll(" ","").toCharArray();
-        //analyze string step by step
-        String firstNumber = "";
-        char operator;
-        String secondNumber = "";
-        for (char c : chars){
-            if (c >= 48 && c <= 57 || c == 46){
-                firstNumber += c;
-            } else if (c == '\''){
-                System.out.println(c);
-            } else if ((c == '+') || (c == '-') || (c == '*') || (c == '/')){
-                operator = c;
-            }else continue;
-        }
-        System.out.println(firstNumber);
-    }
-
 
     public String reader(Scanner s){
         return s.nextLine();
     }
-
-    //arithmetic operation
-
 }
