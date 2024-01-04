@@ -44,11 +44,22 @@ public class Calculator {
     public Calculator(){
         Scanner in = new Scanner(System.in);
 
+
         System.out.print("calc ");
         String line = reader(in);
         StringAnalyzer str = new StringAnalyzer(line);
-        System.out.println(str.getFirstNumber());
+        Arithmetics arithmetics = new Arithmetics(str.getFirstNumber(), str.getSecondNumber());
+
+        switch (str.getOperator()){
+            case '+': System.out.println(arithmetics.add());break;
+            case '-': System.out.println(arithmetics.subtract());break;
+            case '*': System.out.println(arithmetics.multiply());break;
+            case '/': System.out.println(arithmetics.divide());break;
+            default: System.out.println("error");
         }
+
+
+    }
 
     public String reader(Scanner s){
         return s.nextLine();

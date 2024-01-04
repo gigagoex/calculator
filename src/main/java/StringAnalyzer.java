@@ -29,7 +29,6 @@ public class StringAnalyzer {
         return operator;
     }
 
-
     //remove whitespaces
     private void checkFormatOfString(){
         s = s.replaceAll(" ","");
@@ -46,7 +45,6 @@ public class StringAnalyzer {
         //System.out.println(s);
     }
 
-
     private void analyzeString(){
         HashSet<String> validOperators = new HashSet<String>();
         validOperators.add("+");
@@ -56,27 +54,34 @@ public class StringAnalyzer {
         char[] chars = s.toCharArray();
         //analyze string step by step
         String firstNumberString = "";
-        char operator;
         String secondNumberString = "";
-
         int counter = 0;
         for (char c : chars){
             if (c >= 48 && c <= 57 || c == 46){
                 firstNumberString += c;
-                System.out.println(firstNumberString);
             } else if (c == '\''){
-                System.out.println(c);
+                counter++;
+                continue;
             } else if (validOperators.contains(String.valueOf(c))){
-                operator = c;
+                this.operator = c;
                 break;
             }else { //Either no operator was found or an invalid char was found
-                System.err.println("Invalid input");
+                System.err.println("Invalid input first loop");
                 break;
             };
-            counter += 1;
+            counter++;
+        }
+        for (int i = counter + 1; i < s.length() - 1; i++){
+            char c = chars[i];
+            if (c >= 48 && c <= 57 || c == 46){
+                secondNumberString += c;
+            } else{
+                System.err.println("Invalid input second loop");
+                break;
+            }
         }
         //System.out.println(firstNumber);
         this.firstNumber = Double.parseDouble(firstNumberString);
+        this.secondNumber = Double.parseDouble(secondNumberString);
     }
-
 }
