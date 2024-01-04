@@ -33,8 +33,7 @@
  * 6. Console output: result
  */
 
-import java.util.HashSet;
-import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Calculator {
@@ -43,20 +42,26 @@ public class Calculator {
     }
     public Calculator(){
         Scanner in = new Scanner(System.in);
-
-
-        System.out.print("calc ");
-        String line = reader(in);
-        StringAnalyzer str = new StringAnalyzer(line);
-        Arithmetics arithmetics = new Arithmetics(str.getFirstNumber(), str.getSecondNumber());
-
-        switch (str.getOperator()){
-            case '+': System.out.println(arithmetics.add());break;
-            case '-': System.out.println(arithmetics.subtract());break;
-            case '*': System.out.println(arithmetics.multiply());break;
-            case '/': System.out.println(arithmetics.divide());break;
-            default: System.out.println("error");
+        StringAnalyzer str = new StringAnalyzer();
+        Arithmetics arithmetics = new Arithmetics();
+        System.out.println("Stop calculator by typing \'stop\'");
+        while (true){
+            System.out.print("calc ");
+            String line = reader(in);
+            if (Objects.equals(line, "stop")){
+                break;
+            }
+            str.setString(line);
+            arithmetics.setValues(str.getFirstNumber(), str.getSecondNumber());
+            switch (str.getOperator()){
+                case '+': System.out.println(arithmetics.getAdditionResult());break;
+                case '-': System.out.println(arithmetics.getSubstractionResult());break;
+                case '*': System.out.println(arithmetics.getMultiplicationResult());break;
+                case '/': System.out.println(arithmetics.getDivisionResult());break;
+                default: System.out.println("error");
+            }
         }
+
 
 
     }

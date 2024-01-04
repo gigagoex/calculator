@@ -7,11 +7,6 @@ public class StringAnalyzer {
     private double secondNumber;
     private char operator;
 
-    public StringAnalyzer(String s)
-    {
-        setString(s);
-    }
-
     public void setString(String s){
         this.s = s;
         checkFormatOfString();
