@@ -7,7 +7,7 @@ public class StringAnalyzer {
     private double secondNumber;
     private char operator;
 
-    public void setString(String s){
+    public void setString(String s) throws Exception {
         this.s = s;
         checkFormatOfString();
         analyzeString();
@@ -25,23 +25,23 @@ public class StringAnalyzer {
     }
 
     //remove whitespaces
-    private void checkFormatOfString(){
+    private void checkFormatOfString() throws Exception{
         s = s.replaceAll(" ","");
         //check correct input format
         if (!s.startsWith("'")) {
-            System.err.println("Invalid input format: Start with \"'\"");
+            throw new InvalidInputFormatException("Missing leading \"'\"");
         }
         if (!s.endsWith("'")){
-            System.err.println("Invalid input format: End with \"'\"");
+            throw new InvalidInputFormatException("Missing final \"'\"");
         }
         if (s.indexOf("'", 1) < s.length() - 1){
-            System.err.println("Invalid input format: Too many \"'\"");
+            throw new InvalidInputFormatException("Too many \"'\"");
         }
         //System.out.println(s);
     }
 
-    private void analyzeString(){
-        HashSet<String> validOperators = new HashSet<String>();
+    private void analyzeString () throws Exception{
+        HashSet<String> validOperators = new HashSet<>();
         validOperators.add("+");
         validOperators.add("-");
         validOperators.add("*");
@@ -52,6 +52,9 @@ public class StringAnalyzer {
         String secondNumberString = "";
         int counter = 0;
         for (char c : chars){
+            if (c == '-' && counter == 1){ //minus only allowed at first place after "'"
+                firstNumberString += c;
+            }
             if (c >= 48 && c <= 57 || c == 46){
                 firstNumberString += c;
             } else if (c == '\''){
@@ -61,9 +64,8 @@ public class StringAnalyzer {
                 this.operator = c;
                 break;
             }else { //Either no operator was found or an invalid char was found
-                System.err.println("Invalid input first loop");
-                break;
-            };
+                throw new InvalidInputFormatException("Invalid first argument");
+            }
             counter++;
         }
         for (int i = counter + 1; i < s.length() - 1; i++){
@@ -71,12 +73,16 @@ public class StringAnalyzer {
             if (c >= 48 && c <= 57 || c == 46){
                 secondNumberString += c;
             } else{
-                System.err.println("Invalid input second loop");
-                break;
+                throw new InvalidInputFormatException("Invalid second argument");
             }
         }
         //System.out.println(firstNumber);
-        this.firstNumber = Double.parseDouble(firstNumberString);
-        this.secondNumber = Double.parseDouble(secondNumberString);
+        try{
+            this.firstNumber = Double.parseDouble(firstNumberString);
+            this.secondNumber = Double.parseDouble(secondNumberString);
+        } catch (Exception e){
+            throw e;
+        }
+
     }
 }

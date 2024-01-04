@@ -44,14 +44,20 @@ public class Calculator {
         Scanner in = new Scanner(System.in);
         StringAnalyzer str = new StringAnalyzer();
         Arithmetics arithmetics = new Arithmetics();
-        System.out.println("Stop calculator by typing \'stop\'");
+        System.out.println("Stop calculator by typing 'stop'");
         while (true){
             System.out.print("calc ");
             String line = reader(in);
             if (Objects.equals(line, "stop")){
                 break;
             }
-            str.setString(line);
+            try {
+                str.setString(line);
+            } catch (Exception e){
+                System.out.println("Invalid string: " + e);
+                continue;
+            }
+
             arithmetics.setValues(str.getFirstNumber(), str.getSecondNumber());
             switch (str.getOperator()){
                 case '+': System.out.println(arithmetics.getAdditionResult());break;
