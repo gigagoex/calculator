@@ -63,12 +63,14 @@ public class Calculator {
                 case '+': System.out.println(arithmetics.getAdditionResult());break;
                 case '-': System.out.println(arithmetics.getSubstractionResult());break;
                 case '*': System.out.println(arithmetics.getMultiplicationResult());break;
-                case '/': System.out.println(arithmetics.getDivisionResult());break;
+                case '/': try{
+                    System.out.println(arithmetics.getDivisionResult());
+                    } catch (Exception e){
+                    System.out.println("Exception: "+ e);
+                    } break;
                 default: System.out.println("error");
             }
         }
-
-
 
     }
 

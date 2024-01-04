@@ -15,8 +15,17 @@ public class Arithmetics {
     public double getMultiplicationResult(){
         return a * b;
     }
-    public double getDivisionResult(){
+    public double getDivisionResult() throws Exception{
         // div by 0!!!
-        return a / b;
+        try{
+            //As this is floating point math, division by 0 is allowed. To overcome, this line is added
+            if (b == 0){
+                throw new InvalidInputFormatException("Divided by Zero");
+            }
+            return a / b;
+        } catch (Exception e){
+            throw e;
+        }
+
     }
 }

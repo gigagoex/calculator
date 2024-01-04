@@ -37,7 +37,6 @@ public class StringAnalyzer {
         if (s.indexOf("'", 1) < s.length() - 1){
             throw new InvalidInputFormatException("Too many \"'\"");
         }
-        //System.out.println(s);
     }
 
     private void analyzeString () throws Exception{
@@ -51,7 +50,8 @@ public class StringAnalyzer {
         String firstNumberString = "";
         String secondNumberString = "";
         int counter = 0;
-        for (char c : chars){
+        for (int i = 0; i< s.length(); i++){
+            char c = chars[i];
             if (c == '-' && counter == 1){ //minus only allowed at first place after "'"
                 firstNumberString += c;
             }
@@ -61,18 +61,23 @@ public class StringAnalyzer {
                 counter++;
                 continue;
             } else if (validOperators.contains(String.valueOf(c))){
+                //this marks the first appearance of an operator!
                 this.operator = c;
                 break;
             }else { //Either no operator was found or an invalid char was found
                 throw new InvalidInputFormatException("Invalid first argument");
             }
             counter++;
+            if (i == s.length()-2){
+                //if no operator is found yet, there won't be any since the last char is '''
+                throw new InvalidInputFormatException("Missing Operator");
+            }
         }
         for (int i = counter + 1; i < s.length() - 1; i++){
             char c = chars[i];
             if (c >= 48 && c <= 57 || c == 46){
                 secondNumberString += c;
-            } else{
+            } else {
                 throw new InvalidInputFormatException("Invalid second argument");
             }
         }
