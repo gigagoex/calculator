@@ -37,6 +37,8 @@ public class StringAnalyzer {
         if (s.indexOf("'", 1) < s.length() - 1){
             throw new InvalidInputFormatException("Too many \"'\"");
         }
+        //if input is correct, the single quotes are removed for easier string handling
+        s = s.replaceAll("'", "");
     }
 
     private void analyzeString () throws Exception{
@@ -52,37 +54,35 @@ public class StringAnalyzer {
         int counter = 0;
         for (int i = 0; i< s.length(); i++){
             char c = chars[i];
-            if (c == '-' && counter == 1){ //minus only allowed at first place after "'"
-                firstNumberString += c;
-            }
-            if (c >= 48 && c <= 57 || c == 46){
-                firstNumberString += c;
-            } else if (c == '\''){
-                counter++;
-                continue;
-            } else if (validOperators.contains(String.valueOf(c))){
+            if (validOperators.contains(String.valueOf(c)) && i > 0){
                 //this marks the first appearance of an operator!
                 this.operator = c;
                 break;
-            }else { //Either no operator was found or an invalid char was found
-                throw new InvalidInputFormatException("Invalid first argument");
             }
+            firstNumberString += c;
             counter++;
-            if (i == s.length()-2){
+            if (i == s.length() - 1){
                 //if no operator is found yet, there won't be any since the last char is '''
                 throw new InvalidInputFormatException("Missing Operator");
             }
         }
-        for (int i = counter + 1; i < s.length() - 1; i++){
+        //if the first part contains invalid chars, an exception will be thrown here
+        try{
+            this.firstNumber = Double.parseDouble(firstNumberString);
+        } catch(Exception e){
+            System.err.println("Exception converting first String: " + this.firstNumber);
+            throw e;
+        }
+        for (int i = counter + 1; i < s.length(); i++){
             char c = chars[i];
-            if (c >= 48 && c <= 57 || c == 46){
-                secondNumberString += c;
-            } else {
-                throw new InvalidInputFormatException("Invalid second argument");
-            }
+            secondNumberString += c;
         }
         //System.out.println(firstNumber);
-        this.firstNumber = Double.parseDouble(firstNumberString);
-        this.secondNumber = Double.parseDouble(secondNumberString);
+        try{
+            this.secondNumber = Double.parseDouble(secondNumberString);
+        } catch (Exception e){
+            System.err.println("Exception converting second String");
+            throw e;
+        }
     }
 }
