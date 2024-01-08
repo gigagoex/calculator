@@ -1,6 +1,8 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class StringAnalyzerTest {
@@ -56,5 +58,11 @@ public class StringAnalyzerTest {
         stringAnalyzer.setString("'1 + 3'");
         char result = stringAnalyzer.getOperator();
         Assert.assertEquals('+', result);
+    }
+
+    @Test
+    public void splitStringsTest(){
+        ArrayList<String> result = stringAnalyzer.splitString("-1+22+-3");
+        System.out.println(result);
     }
 }
