@@ -65,4 +65,10 @@ public class StringAnalyzerTest {
         ArrayList<String> result = stringAnalyzer.splitString("-1+22+-3");
         System.out.println(result);
     }
+
+    @Test
+    public void cutoutExpression(){
+        String result = stringAnalyzer.cutoutExpression("         ' abc de + 32 - 34'           ");
+        System.out.println(result);
+    }
 }

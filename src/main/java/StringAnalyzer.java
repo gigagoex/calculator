@@ -4,10 +4,6 @@ import java.util.HashSet;
 public class StringAnalyzer {
 
     private String inputString;
-    private String shortenedString;
-    private double firstNumber;
-    private double secondNumber;
-    private char operator;
     private static final HashSet<String> validOperators = new HashSet<>();
 
     public StringAnalyzer(){
@@ -23,70 +19,32 @@ public class StringAnalyzer {
 
     public void setString(String inputString) throws Exception {
         this.inputString = inputString;
-        checkFormatOfString();
-        analyzeString();
     }
 
-    public double getFirstNumber(){
-        return firstNumber;
-    }
-    public double getSecondNumber(){
-        return secondNumber;
+    public ArrayList<String> getResultList(){
+        return splitString(simplifyString(cutoutExpression(this.inputString)));
     }
 
-    public char getOperator(){
-        return operator;
-    }
-
-    //remove whitespaces
-    private void checkFormatOfString() throws Exception{
-        shortenedString = inputString.replaceAll(" ","");
-        //check correct input format
-        if (!shortenedString.startsWith("'")) {
-            throw new InvalidInputFormatException("Missing leading \"'\"");
+    static String cutoutExpression(String s){
+        int startOfString = s.indexOf("'");
+        if(startOfString == -1){
+            throw new InvalidInputFormatException("' expected at start of expression");
         }
-        if (!shortenedString.endsWith("'")){
-            throw new InvalidInputFormatException("Missing final \"'\"");
+        int endOfString = s.indexOf("'", startOfString + 1);
+        if(endOfString == -1){
+            throw new InvalidInputFormatException("' expected at end of expression");
         }
-        // check for >2 single quotation marks
-        if (shortenedString.indexOf("'", 1) < shortenedString.length() - 1){
-            throw new InvalidInputFormatException("Too many \"'\"");
+        if(s.indexOf("'", endOfString + 1) != -1){
+            System.out.println(s.indexOf("'", endOfString + 1));
+            throw new InvalidInputFormatException("invalid format");
         }
-        //if input is correct, the single quotes are removed for easier string handling
-        shortenedString = shortenedString.replaceAll("'", "");
+        return s.substring(startOfString + 1, endOfString);
     }
 
-    private void analyzeString () throws Exception{
-
-        char[] chars = shortenedString.toCharArray();
-        //analyze string step by step
-        String firstNumberString = "";
-        String secondNumberString = "";
-        int charCounter = 0;
-        for (int i = 0; i< shortenedString.length(); i++){
-            char c = chars[i];
-            if (validOperators.contains(String.valueOf(c)) && i > 0){
-                //this marks the first appearance of an operator!
-                this.operator = c;
-                break;
-            }
-            firstNumberString += c;
-            charCounter++;
-            if (i == shortenedString.length() - 1){
-                //if no operator is found yet, there won't be any since the last char is '''
-                throw new InvalidInputFormatException("Missing Operator");
-            }
-        }
-        //if the first part contains invalid chars, an exception will be thrown here
-        this.firstNumber = Double.parseDouble(firstNumberString);
-        for (int i = charCounter + 1; i < shortenedString.length(); i++){
-            char c = chars[i];
-            secondNumberString += c;
-        }
-        //System.out.println(firstNumber);
-        this.secondNumber = Double.parseDouble(secondNumberString);
+    public static String simplifyString(String s){
+        //remove all whitespace
+        return s.replaceAll(" ","");
     }
-
     public static ArrayList<String> splitString(String s){
         var resultList = new ArrayList<String>();
 
@@ -94,7 +52,7 @@ public class StringAnalyzer {
         String numberString = String.valueOf(chars[0]);
         for (int i = 1; i < s.length(); i++){
             //0 - 9 -> Ascii 48 - 57, % -> Ascii 37
-            if (chars[i] >=  48 && chars[i] <= 57 || chars[i] == 37){
+            if (chars[i] >=  48 && chars[i] <= 57 /*|| chars[i] == 37*/){
                 numberString += chars[i];
             } else {
                 //it is either an operator or a sign if the string is valid
