@@ -33,12 +33,17 @@
  * 6. Console output: result
  */
 
-import java.util.Objects;
+import javax.swing.text.NumberFormatter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 
 public class Calculator {
     public static void main(String[] args) {
         new Calculator();
+
+
     }
     public Calculator(){
         Scanner in = new Scanner(System.in);
@@ -47,7 +52,7 @@ public class Calculator {
         System.out.println("Stop calculator by typing 'stop'");
         while (true){
             String line = reader(in);
-            if (Objects.equals(line, "stop")){
+            if (line.equals("stop")){
                 break;
             }
             try {
@@ -55,30 +60,77 @@ public class Calculator {
             } catch (Exception e){
                 System.out.println("Invalid string: " + e);
                 //wait for next input
-                continue;
             }
             try{
-                arithmetics.setValues(stringAnalyzer.getFirstNumber(), stringAnalyzer.getSecondNumber());
+                System.out.println(calculateFromString(stringAnalyzer.getResultList(), stringAnalyzer.getValidOperators()));
             } catch (Exception e){
-                System.out.println(e);
+                System.err.println(e);
             }
-            switch (stringAnalyzer.getOperator()){
-                case '+': System.out.println(arithmetics.getAdditionResult());break;
-                case '-': System.out.println(arithmetics.getSubtractionResult());break;
-                case '*': System.out.println(arithmetics.getMultiplicationResult());break;
-                case '/': try{
-                    System.out.println(arithmetics.getDivisionResult());
-                    } catch (Exception e){
-                    System.out.println("Exception: "+ e);
-                    } break;
-                default: System.out.println("error");
-            }
-        }
 
+        }
     }
 
     public String reader(Scanner s){
         System.out.print("calc ");
         return s.nextLine();
+    }
+
+    public double calculateFromString(ArrayList<String> inputStringList, HashSet<String> validOperators)throws Exception{
+        //Must be Operand - Operator - Operand - Operator - ... - Operand
+        List<String> primaryOperatorsList = inputStringList.stream()
+                .filter(inputString -> inputString.equals("*") || inputString.equals("/"))
+                .toList();
+
+        List<String> secondaryOperatorsList = inputStringList.stream()
+                .filter(inputString -> inputString.equals("+") || inputString.equals("-"))
+                .toList();
+        ArrayList<Double> operandsList = new ArrayList<>();
+
+        inputStringList.stream()
+                .filter(inputString -> !validOperators.contains(inputString))
+                .mapToDouble(Double::parseDouble)
+                .forEach(operandsList::add);
+
+        //calculate multiplication and division
+
+
+
+
+        //Currently, not working properly! if two operations follow each other, the second is ignored
+        for (String primaryOperator : primaryOperatorsList){
+            double intermediateResult;
+            int indexOfOperator = inputStringList.indexOf(primaryOperator);
+            int indexOfFirstOperand = (indexOfOperator - 1) / 2;
+            int indexOfSecondOperand = (indexOfOperator + 1) / 2;
+            if (primaryOperator.equals("*")) {
+                System.out.println("Multiplication: " + operandsList.get(indexOfFirstOperand) + " * " + operandsList.get(indexOfSecondOperand));
+                intermediateResult = operandsList.get(indexOfFirstOperand) * operandsList.get(indexOfSecondOperand);
+            }
+            else { //this must be division
+                System.out.println("Division");
+                double numerator = operandsList.get(indexOfFirstOperand);
+                double denominator = operandsList.get(indexOfSecondOperand);
+                if (denominator == 0)
+                {
+                    throw new InvalidInputFormatException("Divided by 0!");
+                }
+                intermediateResult = numerator / denominator;
+            }
+            operandsList.set(indexOfFirstOperand, intermediateResult);
+        }
+        for (int i = primaryOperatorsList.size() - 1 ; i == 1; i--){
+            int indexOfOperator = inputStringList.indexOf(primaryOperatorsList.get(i));
+            int indexOfSecondOperand = (indexOfOperator + 1) / 2;
+            operandsList.remove(indexOfSecondOperand);
+        }
+        for (String operator : secondaryOperatorsList){
+            if (operator.equals("+")){
+                operandsList.set(1, operandsList.get(0) + operandsList.get(1));
+            } else {
+                operandsList.set(1, operandsList.get(0) - operandsList.get(1));
+            }
+            operandsList.remove(0);
+        }
+        return operandsList.get(0);
     }
 }

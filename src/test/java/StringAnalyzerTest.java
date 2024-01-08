@@ -23,43 +23,6 @@ public class StringAnalyzerTest {
 
     StringAnalyzer stringAnalyzer2 = new StringAnalyzer();
 
-
-
-    @Test
-    public void getFirstNumber() throws Exception{
-        //positive Number
-        stringAnalyzer.setString("'1 + 3'");
-        double result = stringAnalyzer.getFirstNumber();
-        Assert.assertEquals(1, result, 0.001);
-        //negative Number
-        stringAnalyzer.setString("'-1 + 3'");
-        result = stringAnalyzer.getFirstNumber();
-        Assert.assertEquals(-1, result, 0.001);
-
-        //
-        Assert.assertThrows("First number never initialized", AssertionError.class, () -> stringAnalyzer2.getFirstNumber());
-
-    }
-
-    @Test
-    public void getSecondNumber() throws Exception{
-        //positive Number
-        stringAnalyzer.setString("'1 - 3'");
-        double result = stringAnalyzer.getSecondNumber();
-        Assert.assertEquals(3, result, 0.001);
-        //negative Number
-        stringAnalyzer.setString("'1 - -3'");
-        result = stringAnalyzer.getSecondNumber();
-        Assert.assertEquals(-3, result, 0.001);
-    }
-
-    @Test
-    public void getOperator() throws Exception{
-        stringAnalyzer.setString("'1 + 3'");
-        char result = stringAnalyzer.getOperator();
-        Assert.assertEquals('+', result);
-    }
-
     @Test
     public void splitStringsTest(){
         ArrayList<String> result = stringAnalyzer.splitString("-1+22+-3");

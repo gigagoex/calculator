@@ -17,12 +17,16 @@ public class StringAnalyzer {
         validOperators.add("/");
     }
 
+    public HashSet<String> getValidOperators(){
+        return validOperators;
+    }
+
     public void setString(String inputString) throws Exception {
         this.inputString = inputString;
     }
 
     public ArrayList<String> getResultList(){
-        return splitString(simplifyString(cutoutExpression(this.inputString)));
+        return splitString(simplifyString(cutoutExpression(inputString)));
     }
 
     static String cutoutExpression(String s){
