@@ -57,7 +57,11 @@ public class Calculator {
                 //wait for next input
                 continue;
             }
-            arithmetics.setValues(stringAnalyzer.getFirstNumber(), stringAnalyzer.getSecondNumber());
+            try{
+                arithmetics.setValues(stringAnalyzer.getFirstNumber(), stringAnalyzer.getSecondNumber());
+            } catch (Exception e){
+                System.out.println(e);
+            }
             switch (stringAnalyzer.getOperator()){
                 case '+': System.out.println(arithmetics.getAdditionResult());break;
                 case '-': System.out.println(arithmetics.getSubtractionResult());break;

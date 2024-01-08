@@ -53,7 +53,7 @@ public class StringAnalyzer {
         //analyze string step by step
         String firstNumberString = "";
         String secondNumberString = "";
-        int counter = 0;
+        int charCounter = 0;
         for (int i = 0; i< shortenedString.length(); i++){
             char c = chars[i];
             if (validOperators.contains(String.valueOf(c)) && i > 0){
@@ -62,29 +62,19 @@ public class StringAnalyzer {
                 break;
             }
             firstNumberString += c;
-            counter++;
+            charCounter++;
             if (i == shortenedString.length() - 1){
                 //if no operator is found yet, there won't be any since the last char is '''
                 throw new InvalidInputFormatException("Missing Operator");
             }
         }
         //if the first part contains invalid chars, an exception will be thrown here
-        try{
-            this.firstNumber = Double.parseDouble(firstNumberString);
-        } catch(Exception e){
-            System.err.println("Exception converting first String: " + this.firstNumber);
-            throw e;
-        }
-        for (int i = counter + 1; i < shortenedString.length(); i++){
+        this.firstNumber = Double.parseDouble(firstNumberString);
+        for (int i = charCounter + 1; i < shortenedString.length(); i++){
             char c = chars[i];
             secondNumberString += c;
         }
         //System.out.println(firstNumber);
-        try{
-            this.secondNumber = Double.parseDouble(secondNumberString);
-        } catch (Exception e){
-            System.err.println("Exception converting second String");
-            throw e;
-        }
+        this.secondNumber = Double.parseDouble(secondNumberString);
     }
 }
