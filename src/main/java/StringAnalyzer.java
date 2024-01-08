@@ -77,4 +77,7 @@ public class StringAnalyzer {
         //System.out.println(firstNumber);
         this.secondNumber = Double.parseDouble(secondNumberString);
     }
+    private void readFirstNumber(){
+
+    }
 }
