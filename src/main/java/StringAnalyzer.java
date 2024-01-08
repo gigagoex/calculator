@@ -2,13 +2,14 @@ import java.util.HashSet;
 
 public class StringAnalyzer {
 
-    private String s;
+    private String inputString;
+    private String shortenedString;
     private double firstNumber;
     private double secondNumber;
     private char operator;
 
-    public void setString(String s) throws Exception {
-        this.s = s;
+    public void setString(String inputString) throws Exception {
+        this.inputString = inputString;
         checkFormatOfString();
         analyzeString();
     }
@@ -26,19 +27,20 @@ public class StringAnalyzer {
 
     //remove whitespaces
     private void checkFormatOfString() throws Exception{
-        s = s.replaceAll(" ","");
+        shortenedString = inputString.replaceAll(" ","");
         //check correct input format
-        if (!s.startsWith("'")) {
+        if (!shortenedString.startsWith("'")) {
             throw new InvalidInputFormatException("Missing leading \"'\"");
         }
-        if (!s.endsWith("'")){
+        if (!shortenedString.endsWith("'")){
             throw new InvalidInputFormatException("Missing final \"'\"");
         }
-        if (s.indexOf("'", 1) < s.length() - 1){
+        // check for >2 single quotation marks
+        if (shortenedString.indexOf("'", 1) < shortenedString.length() - 1){
             throw new InvalidInputFormatException("Too many \"'\"");
         }
         //if input is correct, the single quotes are removed for easier string handling
-        s = s.replaceAll("'", "");
+        shortenedString = shortenedString.replaceAll("'", "");
     }
 
     private void analyzeString () throws Exception{
@@ -47,12 +49,12 @@ public class StringAnalyzer {
         validOperators.add("-");
         validOperators.add("*");
         validOperators.add("/");
-        char[] chars = s.toCharArray();
+        char[] chars = shortenedString.toCharArray();
         //analyze string step by step
         String firstNumberString = "";
         String secondNumberString = "";
         int counter = 0;
-        for (int i = 0; i< s.length(); i++){
+        for (int i = 0; i< shortenedString.length(); i++){
             char c = chars[i];
             if (validOperators.contains(String.valueOf(c)) && i > 0){
                 //this marks the first appearance of an operator!
@@ -61,7 +63,7 @@ public class StringAnalyzer {
             }
             firstNumberString += c;
             counter++;
-            if (i == s.length() - 1){
+            if (i == shortenedString.length() - 1){
                 //if no operator is found yet, there won't be any since the last char is '''
                 throw new InvalidInputFormatException("Missing Operator");
             }
@@ -73,7 +75,7 @@ public class StringAnalyzer {
             System.err.println("Exception converting first String: " + this.firstNumber);
             throw e;
         }
-        for (int i = counter + 1; i < s.length(); i++){
+        for (int i = counter + 1; i < shortenedString.length(); i++){
             char c = chars[i];
             secondNumberString += c;
         }

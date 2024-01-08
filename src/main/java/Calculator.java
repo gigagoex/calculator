@@ -46,7 +46,6 @@ public class Calculator {
         Arithmetics arithmetics = new Arithmetics();
         System.out.println("Stop calculator by typing 'stop'");
         while (true){
-            System.out.print("calc ");
             String line = reader(in);
             if (Objects.equals(line, "stop")){
                 break;
@@ -61,7 +60,7 @@ public class Calculator {
             arithmetics.setValues(stringAnalyzer.getFirstNumber(), stringAnalyzer.getSecondNumber());
             switch (stringAnalyzer.getOperator()){
                 case '+': System.out.println(arithmetics.getAdditionResult());break;
-                case '-': System.out.println(arithmetics.getSubstractionResult());break;
+                case '-': System.out.println(arithmetics.getSubtractionResult());break;
                 case '*': System.out.println(arithmetics.getMultiplicationResult());break;
                 case '/': try{
                     System.out.println(arithmetics.getDivisionResult());
@@ -75,6 +74,7 @@ public class Calculator {
     }
 
     public String reader(Scanner s){
+        System.out.print("calc ");
         return s.nextLine();
     }
 }
