@@ -33,13 +33,13 @@
  * 6. Console output: result
  */
 
-import javax.swing.text.NumberFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
 public class Calculator {
+    double oldResult;
     public static void main(String[] args) {
         new Calculator();
 
@@ -62,11 +62,12 @@ public class Calculator {
                 //wait for next input
             }
             try{
-                System.out.println(calculateFromString(stringAnalyzer.getResultList(), stringAnalyzer.getValidOperators()));
+                double result = calculateFromString(stringAnalyzer.getResultList(), stringAnalyzer.getPossibleOperators());
+                System.out.println(result);
+                oldResult = result;
             } catch (Exception e){
                 System.err.println(e);
             }
-
         }
     }
 
@@ -75,62 +76,80 @@ public class Calculator {
         return s.nextLine();
     }
 
-    public double calculateFromString(ArrayList<String> inputStringList, HashSet<String> validOperators)throws Exception{
+    public double calculateFromString(ArrayList<String> inputStringList, HashSet<String> operators)throws Exception{
         //Must be Operand - Operator - Operand - Operator - ... - Operand
-        List<String> primaryOperatorsList = inputStringList.stream()
-                .filter(inputString -> inputString.equals("*") || inputString.equals("/"))
-                .toList();
+        ArrayList<String> operatorList = new ArrayList<>();
+        for (String inputString : inputStringList) {
+            if (operators.contains(inputString)) {
+                operatorList.add(inputString);
+            }
+        }
+        ArrayList<Double> operandList = new ArrayList<>();
+        double operand;
+        for (String inputString : inputStringList) {
+            if (!operators.contains(inputString)) {
+                if (inputString.equals("%")){
+                    operand = this.oldResult;
+                } else {
+                    operand = Double.parseDouble(inputString);
+                }
 
-        List<String> secondaryOperatorsList = inputStringList.stream()
-                .filter(inputString -> inputString.equals("+") || inputString.equals("-"))
-                .toList();
-        ArrayList<Double> operandsList = new ArrayList<>();
+                operandList.add(operand);
+            }
+        }
 
-        inputStringList.stream()
-                .filter(inputString -> !validOperators.contains(inputString))
-                .mapToDouble(Double::parseDouble)
-                .forEach(operandsList::add);
 
         //calculate multiplication and division
+        calculateFromLeftToRight(operatorList, operandList, true);
+        //calculate the rest
+        calculateFromLeftToRight(operatorList, operandList, false);
+        return operandList.get(0);
+    }
 
-
-
-
-        //Currently, not working properly! if two operations follow each other, the second is ignored
-        for (String primaryOperator : primaryOperatorsList){
-            double intermediateResult;
-            int indexOfOperator = inputStringList.indexOf(primaryOperator);
-            int indexOfFirstOperand = (indexOfOperator - 1) / 2;
-            int indexOfSecondOperand = (indexOfOperator + 1) / 2;
-            if (primaryOperator.equals("*")) {
-                System.out.println("Multiplication: " + operandsList.get(indexOfFirstOperand) + " * " + operandsList.get(indexOfSecondOperand));
-                intermediateResult = operandsList.get(indexOfFirstOperand) * operandsList.get(indexOfSecondOperand);
-            }
-            else { //this must be division
-                System.out.println("Division");
-                double numerator = operandsList.get(indexOfFirstOperand);
-                double denominator = operandsList.get(indexOfSecondOperand);
-                if (denominator == 0)
-                {
-                    throw new InvalidInputFormatException("Divided by 0!");
-                }
-                intermediateResult = numerator / denominator;
-            }
-            operandsList.set(indexOfSecondOperand, intermediateResult);
+    public static double divide(double numerator, double denominator) throws Exception{
+        //this method is used for appropriate div by 0 errors for double arithmetics
+        if (denominator == 0)
+        {
+            throw new InvalidInputFormatException("Divided by 0!");
         }
-        for (int i = primaryOperatorsList.size() - 1 ; i == 1; i--){
-            int indexOfOperator = inputStringList.indexOf(primaryOperatorsList.get(i));
-            int indexOfFirstOperand = (indexOfOperator - 1) / 2;
-            operandsList.remove(indexOfFirstOperand);
+        return numerator / denominator;
+    }
+
+    public static void deleteUsedTerm(ArrayList<String> operatorList, ArrayList<Double> operandList, int index){
+        operandList.remove(index);
+        operatorList.remove(index);
+    }
+
+    public static void calculateFromLeftToRight(ArrayList<String> operatorList, ArrayList<Double> operandList, boolean firstOrderOperator) throws Exception{
+        ArrayList<String> allowedOperators = new ArrayList<>();
+        if (firstOrderOperator){
+            allowedOperators.add("*");
+            allowedOperators.add("/");
+        } else {
+            allowedOperators.add("+");
+            allowedOperators.add("-");
         }
-        for (String operator : secondaryOperatorsList){
-            if (operator.equals("+")){
-                operandsList.set(1, operandsList.get(0) + operandsList.get(1));
+        int i = 0;
+        while (i < operatorList.size()){
+            double firstOperand = operandList.get(i);
+            double secondOperand = operandList.get(i + 1);
+            String operator = operatorList.get(i);
+            double result;
+            if (allowedOperators.contains(operator)){
+                result = switch (operator) {
+                    case "^" -> Math.pow(firstOperand, secondOperand);
+                    case "*" -> firstOperand * secondOperand;
+                    case "/" -> divide(firstOperand, secondOperand);
+                    case "+" -> firstOperand + secondOperand;
+                    case "-" -> firstOperand - secondOperand;
+                    //cannot happen
+                    default -> 0;
+                };
+                operandList.set(i + 1, result);
+                deleteUsedTerm(operatorList, operandList, i);
             } else {
-                operandsList.set(1, operandsList.get(0) - operandsList.get(1));
+                i++;
             }
-            operandsList.remove(0);
         }
-        return operandsList.get(0);
     }
 }

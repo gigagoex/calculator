@@ -17,7 +17,7 @@ public class StringAnalyzer {
         validOperators.add("/");
     }
 
-    public HashSet<String> getValidOperators(){
+    public HashSet<String> getPossibleOperators(){
         return validOperators;
     }
 
@@ -26,7 +26,7 @@ public class StringAnalyzer {
     }
 
     public ArrayList<String> getResultList(){
-        return splitString(simplifyString(cutoutExpression(inputString)));
+        return splitStringAtOperators(simplifyString(cutoutExpression(inputString)));
     }
 
     static String cutoutExpression(String s){
@@ -49,19 +49,19 @@ public class StringAnalyzer {
         //remove all whitespace
         return s.replaceAll(" ","");
     }
-    public static ArrayList<String> splitString(String s){
+    public static ArrayList<String> splitStringAtOperators(String s){
         var resultList = new ArrayList<String>();
-
         char[] chars = s.toCharArray();
+        //must start either with sign or with number so first char can be set safely
         String numberString = String.valueOf(chars[0]);
         for (int i = 1; i < s.length(); i++){
             //0 - 9 -> Ascii 48 - 57, % -> Ascii 37
-            if (chars[i] >=  48 && chars[i] <= 57 /*|| chars[i] == 37*/){
+            if ((chars[i] >=  48 && chars[i] <= 57) || chars[i] == 37){
                 numberString += chars[i];
             } else {
                 //it is either an operator or a sign if the string is valid
                 //if the previous char was a number, it must be an operator else it is a sign or invalid
-                if (chars[i - 1] >=  48 && chars[i - 1] <= 57){
+                if (chars[i - 1] >=  48 && chars[i - 1] <= 57 || chars[i - 1] == 37){
                     resultList.add(numberString);
                     numberString="";
                     resultList.add(String.valueOf(chars[i]));
