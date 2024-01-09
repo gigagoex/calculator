@@ -116,12 +116,12 @@ public class Calculator {
                 }
                 intermediateResult = numerator / denominator;
             }
-            operandsList.set(indexOfFirstOperand, intermediateResult);
+            operandsList.set(indexOfSecondOperand, intermediateResult);
         }
         for (int i = primaryOperatorsList.size() - 1 ; i == 1; i--){
             int indexOfOperator = inputStringList.indexOf(primaryOperatorsList.get(i));
-            int indexOfSecondOperand = (indexOfOperator + 1) / 2;
-            operandsList.remove(indexOfSecondOperand);
+            int indexOfFirstOperand = (indexOfOperator - 1) / 2;
+            operandsList.remove(indexOfFirstOperand);
         }
         for (String operator : secondaryOperatorsList){
             if (operator.equals("+")){
