@@ -62,7 +62,16 @@ public class CalculatorTest {
             }
             result = calculator.getResult();
             Assert.assertEquals(2, result, 0.0001);
+
+            //Test of error handling
+
         }
+    }
+
+    @Test(expected = Exception.class)
+    public void solveTermNegative()throws Exception{
+        calculator.setLine("% / 2'");
+        calculator.calculate();
     }
 
     @Test

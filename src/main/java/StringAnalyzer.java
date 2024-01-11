@@ -10,6 +10,9 @@ public class StringAnalyzer {
         return validOperators;
     }
     public void setString(String inputString) {
+        if(!stringIsValid(inputString, validOperators)){
+            throw new InvalidInputFormatException("Invalid Input");
+        }
         this.inputString = inputString;
     }
         public void setOperatorSet(HashSet<String> operatorsSet){
@@ -28,7 +31,7 @@ public class StringAnalyzer {
         return s.substring(startOfString + 1, endOfString);
     }
 
-    public String simplifyString(String s){
+    public static String simplifyString(String s){
         //remove all whitespace
         return s.replaceAll(" ","");
     }
@@ -64,23 +67,24 @@ public class StringAnalyzer {
         return (c >= 48 && c <= 57 || c == '.' || c == '%');
     }
     public static boolean stringIsValid(String string, HashSet<String> validOperators){
-        int startOfString = string.indexOf("'");
+        String stringWithoutWhitespace = simplifyString(string);
+        int startOfString = stringWithoutWhitespace.indexOf("'");
         if(startOfString == -1){
             return false;
         }
-        int endOfString = string.indexOf("'", startOfString + 1);
+        int endOfString = stringWithoutWhitespace.indexOf("'", startOfString + 1);
         if(endOfString == -1){
             return false;
         }
-        if(string.indexOf("'", endOfString + 1) != -1){
+        if(stringWithoutWhitespace.indexOf("'", endOfString + 1) != -1){
             return false;
         }
         //check if string contains anything except operators and numbers
-        char[] chars = string.toCharArray();
-        for (char c : chars){
-            if(charCanBePartOfANumber(c)){
+        char[] chars = stringWithoutWhitespace.toCharArray();
+        for (int i = 1; i<chars.length - 1; i++){
+            if(charCanBePartOfANumber(chars[i])){
                 continue;
-            } else if (characterIsValidOperator(c, validOperators)){
+            } else if (characterIsValidOperator(chars[i], validOperators)){
                 continue;
             } else {
                 return false;

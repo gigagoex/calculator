@@ -136,7 +136,7 @@ public class Calculator {
         if(StringAnalyzer.stringIsValid(this.line, operatorSet)){
             stringAnalyzer.setString(this.line);
         } else {
-            throw new InvalidInputFormatException("Invalid input String");
+            throw new InvalidInputFormatException("Invalid input String provided");
         }
         this.result = solveSplitTerm(stringAnalyzer.getListOfStrings(), stringAnalyzer.getPossibleOperators());
     }
