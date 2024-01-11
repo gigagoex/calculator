@@ -49,8 +49,8 @@ import java.util.Scanner;
 public class Calculator {
 
     public static void main(String[] args) {
-        new Calculator();
-
+        Calculator calculator = new Calculator();
+        calculator.run();
     }
 
     private String line;
@@ -58,18 +58,36 @@ public class Calculator {
     private final StringAnalyzer stringAnalyzer;
     private ArrayList<String> operatorList;
     private ArrayList<Double> operandList;
+    private final Scanner scanner;
+
+    private static final String[][] OPERATORS_ORDERED = new String[][]{
+//            {
+//                "^"
+//            },
+            {
+                    "*", "/"
+            },
+            {
+                    "+", "-"
+            }
+    };
+    private final HashSet<String> operatorSet;
 
     public Calculator(){
-        Scanner in = new Scanner(System.in);
+        scanner = new Scanner(System.in);
         stringAnalyzer = new StringAnalyzer();
+        operatorSet = makeStringSetFromOperators();
+        stringAnalyzer.setOperatorSet(operatorSet);
+    }
+    public void run(){
         System.out.println("Stop calculator by typing 'stop'");
         while (true){
-            readLine(in);
+            readLine(scanner);
             if (line.equals("stop")){
                 break;
             }
             try {
-                calculateResultFromCurrentString();
+                calculate();
             } catch (Exception e){
                 System.out.println("Invalid string: " + e);
                 //wait for next input
@@ -77,18 +95,51 @@ public class Calculator {
             printResult();
         }
     }
+    private HashSet<String> makeStringSetFromOperators(){
+        HashSet<String> operatorSet = new HashSet<>();
+        for (String[] order : Calculator.OPERATORS_ORDERED){
+            for (String operator : order){
+                operatorSet.add(operator);
+            }
+        }
+        return operatorSet;
+    }
 
-    private void readLine(Scanner s){
+    //Getters and setters (for testing)
+    public void setLine(String line){
+        this.line = line;
+    }
+    public double getResult() {
+        return result;
+    }
+    public String getLine(){
+        return line;
+    }
+    public ArrayList<String> getOperatorList(){
+        return operatorList;
+    }
+    public ArrayList<Double> getOperandList(){
+        return operandList;
+    }
+
+    public void setResult(double result){
+        this.result = result;
+    }
+
+    public void readLine(Scanner s){
         System.out.print("calc ");
         this.line = s.nextLine();
     }
 
-    private void calculateResultFromCurrentString() throws Exception {
-        stringAnalyzer.setString(this.line);
-        this.result = solveSplitTerm(stringAnalyzer.getResultList(), stringAnalyzer.getPossibleOperators());
+    public void calculate() throws Exception {
+        if(StringAnalyzer.stringIsValid(this.line, operatorSet)){
+            stringAnalyzer.setString(this.line);
+        } else {
+            throw new InvalidInputFormatException("Invalid input String");
+        }
+        this.result = solveSplitTerm(stringAnalyzer.getListOfStrings(), stringAnalyzer.getPossibleOperators());
     }
-
-    private double solveSplitTerm(ArrayList<String> inputStringList, HashSet<String> operators)throws Exception{
+    public double solveSplitTerm(ArrayList<String> inputStringList, HashSet<String> operators)throws Exception{
         //Must be Operand - Operator - Operand - Operator - ... - Operand
         this.operatorList = new ArrayList<>();
         for (String inputString : inputStringList) {
@@ -109,23 +160,18 @@ public class Calculator {
                 operandList.add(operand);
             }
         }
-
-
-        //calculate multiplication and division
-        calculateFromLeftToRight(true);
-        //calculate the rest
-        calculateFromLeftToRight(false);
+        //calculate in correct order:
+        //order by operatorsOrdered
+        // * and / before + and -, from left to right
+        for (int i = 0; i < OPERATORS_ORDERED.length; i++){
+            calculateFromLeftToRight(i);
+        }
         return this.operandList.get(0);
     }
-
-    private void calculateFromLeftToRight(boolean firstOrderOperator) throws Exception{
+    public void calculateFromLeftToRight(int orderNo) throws Exception{
         ArrayList<String> allowedOperators = new ArrayList<>();
-        if (firstOrderOperator){
-            allowedOperators.add("*");
-            allowedOperators.add("/");
-        } else {
-            allowedOperators.add("+");
-            allowedOperators.add("-");
+        for (String operator : OPERATORS_ORDERED[orderNo]){
+            allowedOperators.add(operator);
         }
         int i = 0;
         while (i < operatorList.size()){
@@ -150,7 +196,6 @@ public class Calculator {
             }
         }
     }
-
     static double divide(double numerator, double denominator) throws Exception{
         //this method is used for appropriate div by 0 errors for double arithmetics
         if (denominator == 0)
@@ -159,13 +204,11 @@ public class Calculator {
         }
         return numerator / denominator;
     }
-
-    private void deleteUsedTerm(int index){
+    public void deleteUsedTerm(int index){
         this.operandList.remove(index);
         this.operatorList.remove(index);
     }
-
-    private void printResult(){
+    public void printResult(){
         System.out.println(this.result);
     }
 }
