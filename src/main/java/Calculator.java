@@ -60,22 +60,23 @@ public class Calculator {
     private ArrayList<Double> operandList;
     private final Scanner scanner;
 
-    private static final String[][] OPERATORS_ORDERED = new String[][]{
-//            {
-//                "^"
-//            },
-            {
-                    "*", "/"
-            },
-            {
-                    "+", "-"
-            }
-    };
+    private final String[][] operatorsOrdered;
     private final HashSet<String> operatorSet;
 
     public Calculator(){
         scanner = new Scanner(System.in);
         stringAnalyzer = new StringAnalyzer();
+        operatorsOrdered  = new String[][]{
+//            {
+//                "^"
+//            },
+                {
+                        "*", "/"
+                },
+                {
+                        "+", "-"
+                }
+        };
         operatorSet = makeStringSetFromOperators();
         stringAnalyzer.setOperatorSet(operatorSet);
     }
@@ -95,9 +96,9 @@ public class Calculator {
             printResult();
         }
     }
-    private HashSet<String> makeStringSetFromOperators(){
+    private HashSet<String> makeStringSetFromOperators(String[][] operatorsOrdered){
         HashSet<String> operatorSet = new HashSet<>();
-        for (String[] order : Calculator.OPERATORS_ORDERED){
+        for (String[] order : operatorsOrdered){
             for (String operator : order){
                 operatorSet.add(operator);
             }
@@ -163,14 +164,14 @@ public class Calculator {
         //calculate in correct order:
         //order by operatorsOrdered
         // * and / before + and -, from left to right
-        for (int i = 0; i < OPERATORS_ORDERED.length; i++){
+        for (int i = 0; i < operatorsOrdered.length; i++){
             calculateFromLeftToRight(i);
         }
         return this.operandList.get(0);
     }
     public void calculateFromLeftToRight(int orderNo) throws Exception{
         ArrayList<String> allowedOperators = new ArrayList<>();
-        for (String operator : OPERATORS_ORDERED[orderNo]){
+        for (String operator : operatorsOrdered[orderNo]){
             allowedOperators.add(operator);
         }
         int i = 0;
