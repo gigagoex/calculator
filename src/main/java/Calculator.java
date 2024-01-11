@@ -77,7 +77,7 @@ public class Calculator {
                         "+", "-"
                 }
         };
-        operatorSet = makeStringSetFromOperators();
+        operatorSet = makeStringSetFromOperators(operatorsOrdered);
         stringAnalyzer.setOperatorSet(operatorSet);
     }
     public void run(){
