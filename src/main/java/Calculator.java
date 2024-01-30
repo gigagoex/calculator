@@ -1,24 +1,37 @@
+import exceptions.DividedByZeroException;
+import exceptions.InvalidInputFormatException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+/**
+ * This class calculates the result of an expression provided as Term object.
+ * The calculator calculates the term in the order inherited from Operators and from left to right.
+ * @author Maximilian Göckeler
+ */
 public class Calculator extends Operators{
 
     private ArrayList<String> operatorList;
     private ArrayList<String> operandList;
     private ArrayList<Double> operandDoubleList;
+    /**
+     *
+     */
     private double oldResult = 0;
 
     public void setOldResult(double oldResult){
         this.oldResult = oldResult;
     }
 
-    public double calculate(Term term) throws DividedByZeroException, InvalidInputFormatException{
+    public double calculate(Term term) throws DividedByZeroException, InvalidInputFormatException {
         operatorList = term.getOperatorList();
         operandList = term.getOperandList();
         operandDoubleList = stringListToDoubleList();
-        return solveTerm();
+        double result = solveTerm();
+        oldResult = result;
+        return result;
     }
 
-    public double solveTerm() throws DividedByZeroException, InvalidInputFormatException{
+    private double solveTerm() throws DividedByZeroException, InvalidInputFormatException{
         //Must be Operand - Operator - Operand - Operator - ... - Operand
         //calculate in correct order:
         //order by operatorsOrdered
@@ -32,10 +45,9 @@ public class Calculator extends Operators{
         else{
             throw new InvalidInputFormatException("Too many arguments left" + operandDoubleList);
         }
-
     }
 
-    public void calculateFromLeftToRight(int orderNo)throws DividedByZeroException{
+    private void calculateFromLeftToRight(int orderNo)throws DividedByZeroException{
         ArrayList<String> allowedOperators = new ArrayList<>(Arrays.asList(orderedOperatorArray[orderNo]));
         int i = 0;
         while (i < operatorList.size()){
@@ -70,7 +82,7 @@ public class Calculator extends Operators{
         return numerator / denominator;
     }
 
-    public void deleteUsedTerm(int index){
+    private void deleteUsedTerm(int index){
         this.operandDoubleList.remove(index);
         this.operatorList.remove(index);
     }

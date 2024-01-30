@@ -52,44 +52,20 @@ public class Main {
             if (currentLine.equals("stop")){
                 break;
             }
-
             try{
-                String termString = extractTerm(currentLine);
+                String termString = InputStringModifier.extractTerm(currentLine);
                 Term term = new Term(termString);
                 double result = calculator.calculate(term);
                 System.out.println(result);
-                calculator.setOldResult(result);
             } catch (Exception e){
                 System.err.println(e);
             }
         }
-
     }
     private static final Scanner scanner = new Scanner(System.in);
     private static final Calculator calculator = new Calculator();
     static String readLine(Scanner s){
         System.out.print("calc ");
         return s.nextLine();
-    }
-
-    private static String extractTerm(String line) throws InvalidInputFormatException{
-        return simplifyString(cutoutExpression(line));
-    }
-
-    private static String cutoutExpression(String s) throws InvalidInputFormatException{
-        int startOfString = s.indexOf("'");
-        if (startOfString < 0){
-            throw new InvalidInputFormatException("No quotation marks found");
-        }
-        int endOfString = s.indexOf("'", startOfString + 1);
-        if (endOfString <= startOfString){
-            throw new InvalidInputFormatException("No final quotation mark found");
-        }
-        return s.substring(startOfString + 1, endOfString);
-    }
-
-    public static String simplifyString(String s){
-        //remove all whitespace
-        return s.replaceAll(" ","");
     }
 }
