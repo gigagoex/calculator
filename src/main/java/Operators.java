@@ -1,3 +1,4 @@
+import java.util.Collections;
 import java.util.HashSet;
 /**
  * This package provides the basic mathematical operators.
@@ -29,9 +30,7 @@ public class Operators {
     private HashSet<String> createStringSetOfOperators(){
         HashSet<String> operatorSet = new HashSet<>();
         for (String[] order : this.orderedOperatorArray){
-            for (String operator : order){
-                operatorSet.add(operator);
-            }
+            Collections.addAll(operatorSet, order);
         }
         return operatorSet;
     }

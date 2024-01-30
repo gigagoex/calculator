@@ -28,17 +28,17 @@ public class Term extends Operators {
         //analyze input String char by char
         char[] chars = this.inputString.toCharArray();
         //must start either with sign or with number so first char can be set safely
-        String numberString = String.valueOf(chars[0]);
+        StringBuilder numberString = new StringBuilder(String.valueOf(chars[0]));
         for (int i = 1; i < this.inputString.length(); i++){
             if (charCanBePartOfANumber(chars[i])){
-                numberString += chars[i];
+                numberString.append(chars[i]);
             } else {
                 //it is either an operator or a sign if the string is valid
                 //if the previous char was a number, it must be an operator else it is a sign or invalid
                 //therefore, the number string ended
                 if (chars[i - 1] >=  48 && chars[i - 1] <= 57 || chars[i - 1] == '%'){
-                    operandList.add(numberString);
-                    numberString="";
+                    operandList.add(numberString.toString());
+                    numberString = new StringBuilder();
                     if (characterIsValidOperator(chars[i])){
                         operatorList.add(String.valueOf(chars[i]));
                     }
@@ -47,7 +47,7 @@ public class Term extends Operators {
                 }
             }
         } if (!numberString.isEmpty()){
-            operandList.add(numberString);
+            operandList.add(numberString.toString());
         }
     }
 
