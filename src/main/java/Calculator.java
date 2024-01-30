@@ -1,11 +1,10 @@
 import exceptions.DividedByZeroException;
-import exceptions.InvalidInputFormatException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * This class calculates the result of an expression provided as Term object.
- * The calculator calculates the term in the order inherited from Operators and from left to right.
+ * The calculator solves the term in the order inherited from Operators and from left to right.
  * @author Maximilian Göckeler
  */
 public class Calculator extends Operators{
@@ -22,7 +21,7 @@ public class Calculator extends Operators{
         this.oldResult = oldResult;
     }
 
-    public double calculate(Term term) throws DividedByZeroException, InvalidInputFormatException {
+    public double calculate(Term term) throws DividedByZeroException {
         operatorList = term.getOperatorList();
         operandList = term.getOperandList();
         operandDoubleList = stringListToDoubleList();
@@ -31,7 +30,7 @@ public class Calculator extends Operators{
         return result;
     }
 
-    private double solveTerm() throws DividedByZeroException, InvalidInputFormatException{
+    private double solveTerm() throws DividedByZeroException{
         //Must be Operand - Operator - Operand - Operator - ... - Operand
         //calculate in correct order:
         //order by operatorsOrdered
@@ -39,12 +38,7 @@ public class Calculator extends Operators{
         for (int i = 0; i < orderedOperatorArray.length; i++){
             calculateFromLeftToRight(i);
         }
-        if(operandDoubleList.size() == 1){
-            return this.operandDoubleList.get(0);
-        }
-        else{
-            throw new InvalidInputFormatException("Too many arguments left" + operandDoubleList);
-        }
+        return this.operandDoubleList.get(0);
     }
 
     private void calculateFromLeftToRight(int orderNo)throws DividedByZeroException{

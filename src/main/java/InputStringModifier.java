@@ -8,17 +8,17 @@ public class InputStringModifier {
 
     private static String cutoutExpression(String s) throws InvalidInputFormatException{
         int startOfString = s.indexOf("'");
-        if (startOfString < 0){
-            throw new InvalidInputFormatException("No quotation marks found");
+        if (startOfString != 0){
+            throw new InvalidInputFormatException("Missing leading quotation mark");
         }
         int endOfString = s.indexOf("'", startOfString + 1);
         if (endOfString <= startOfString){
-            throw new InvalidInputFormatException("No final quotation mark found");
+            throw new InvalidInputFormatException("Missing final quotation mark");
         }
         return s.substring(startOfString + 1, endOfString);
     }
 
-    public static String simplifyString(String s){
+    private static String simplifyString(String s){
         //remove all whitespace
         return s.replaceAll(" ","");
     }
