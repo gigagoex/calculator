@@ -21,27 +21,41 @@ public class Calculator extends Operators{
         this.oldResult = oldResult;
     }
 
+    /**
+     * gets operatorList and operandList from the Term and solves the term
+     * @see "calculate"
+     * @param term input Term
+     * @return result
+     * @throws DividedByZeroException forwards DividedByZeroException thrown by calculate to process in the main program
+     */
     public double calculate(Term term) throws DividedByZeroException {
         operatorList = term.getOperatorList();
         operandList = term.getOperandList();
         operandDoubleList = stringListToDoubleList();
         double result = solveTerm();
-        oldResult = result;
+        setOldResult(result);
         return result;
     }
 
+    /**
+     * solves the term by passing the current operator order no to calculateFromLeftToRight
+     * @see "calculateFromLeftToRight"
+     * @return the result of the solved term
+     * @throws DividedByZeroException forwards the DividedByZeroException thrown by calculateFromLeftToRight
+     */
     private double solveTerm() throws DividedByZeroException{
-        //Must be Operand - Operator - Operand - Operator - ... - Operand
-        //calculate in correct order:
-        //order by operatorsOrdered
-        // * and / before + and -, from left to right
         for (int i = 0; i < orderedOperatorArray.length; i++){
             calculateFromLeftToRight(i);
         }
         return this.operandDoubleList.get(0);
     }
 
-    private void calculateFromLeftToRight(int orderNo)throws DividedByZeroException{
+    /**
+     * Calculates the remaining term from left to right
+     * @param orderNo the order of the operators processed. '^' is 0th order, '*' + '/' are 1st order, '+' + '-' are 2nd order
+     * @throws DividedByZeroException thrown if a division by 0 occurs
+     */
+    private void calculateFromLeftToRight(int orderNo) throws DividedByZeroException{
         ArrayList<String> allowedOperators = new ArrayList<>(Arrays.asList(orderedOperatorArray[orderNo]));
         int i = 0;
         while (i < operatorList.size()){
@@ -67,8 +81,15 @@ public class Calculator extends Operators{
         }
     }
 
+    /**
+     * necessary method for appropriate error handling of div by 0 errors for double arithmetics
+     * @param numerator the numerator
+     * @param denominator the denominator
+     * @return the result if no div by 0 error occurs
+     * @throws DividedByZeroException Error message if denominator == 0
+     */
     static double divide(double numerator, double denominator) throws DividedByZeroException{
-        //this method is used for appropriate div by 0 errors for double arithmetics
+
         if (denominator == 0)
         {
             throw new DividedByZeroException();
@@ -76,11 +97,19 @@ public class Calculator extends Operators{
         return numerator / denominator;
     }
 
+    /**
+     * removes the processed operators and operands
+     * @param index the index of the value to be removed
+     */
     private void deleteUsedTerm(int index){
         this.operandDoubleList.remove(index);
         this.operatorList.remove(index);
     }
 
+    /**
+     * Casts the StringListArray obtained from Term into a DoubleListArray
+     * @return ListArray of the operands as Double
+     */
     private ArrayList<Double> stringListToDoubleList(){
         ArrayList<Double> returnList = new ArrayList<>();
         for (int i = 0; i< operandList.size(); i++){
