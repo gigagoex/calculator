@@ -1,7 +1,10 @@
 package com.github.gigagoex.exercises;
-
 import com.github.gigagoex.exercises.exceptions.InvalidInputFormatException;
 
+/**
+ * Class that provides a method to reformat an Input String into a String readable by the Term class
+ * @see "Term"
+ */
 public class InputStringModifier {
 
     public static String extractTerm(String line) throws InvalidInputFormatException {

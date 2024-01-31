@@ -1,5 +1,8 @@
 package com.github.gigagoex.exercises;
 
+import com.github.gigagoex.exercises.exceptions.DividedByZeroException;
+import com.github.gigagoex.exercises.exceptions.InvalidInputFormatException;
+
 import java.util.Scanner;
 
 /* com.github.gigagoex.exercises.Main program
@@ -46,6 +49,10 @@ import java.util.Scanner;
  * from left to right
  */
 
+/**
+ * Entry Point of the program.
+ *
+ */
 public class Main {
     public static void main(String[] args){
         System.out.println("Stop calculator by typing 'stop'");
@@ -60,7 +67,15 @@ public class Main {
                 double result = calculator.calculate(term);
                 System.out.println(result);
             } catch (Exception e){
-                System.err.println(e);
+                if (e.getClass() == DividedByZeroException.class){
+                    System.out.println("Divided By Zero!");
+                } else if (e.getClass() == InvalidInputFormatException.class){
+                    System.out.println(e.getMessage());
+                }
+                else {
+                    System.out.println("An error occurred:" + e);
+                    break;
+                }
             }
         }
     }
