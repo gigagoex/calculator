@@ -1,6 +1,8 @@
+package com.github.gigagoex.exercises;
+
 import java.util.Scanner;
 
-/* Main program
+/* com.github.gigagoex.exercises.Main program
  * Als Anwender des Terminals möchte ich einfache Rechenoperationen im Terminal ausführen können.
  * Als Anwender reichen mir dazu die Grundoperatoren der
  *      Addition
@@ -34,7 +36,7 @@ import java.util.Scanner;
  * 5. Calculate Result
  * 6. Console output: result
  *
- * Main loop should contain three methods:
+ * com.github.gigagoex.exercises.Main loop should contain three methods:
  * readCurrentLine()
  * calculateFromString()
  * printResult()

@@ -1,4 +1,6 @@
-import exceptions.InvalidInputFormatException;
+package com.github.gigagoex.exercises;
+
+import com.github.gigagoex.exercises.exceptions.InvalidInputFormatException;
 
 public class InputStringModifier {
 

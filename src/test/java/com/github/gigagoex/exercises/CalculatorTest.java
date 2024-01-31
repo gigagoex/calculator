@@ -1,4 +1,8 @@
-import exceptions.DividedByZeroException;
+package com.github.gigagoex.exercises;
+
+import com.github.gigagoex.exercises.Calculator;
+import com.github.gigagoex.exercises.Term;
+import com.github.gigagoex.exercises.exceptions.DividedByZeroException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -6,7 +10,7 @@ class CalculatorTest {
     Calculator calculator = new Calculator();
     Term term;
     @Test
-    public void calculateTest() throws Exception{
+    public void CalculateTest() throws Exception{
 
         term = new Term("2*2");
         Assertions.assertEquals(4, calculator.calculate(term), 0.0001);

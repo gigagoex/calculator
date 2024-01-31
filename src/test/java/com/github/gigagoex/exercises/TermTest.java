@@ -1,4 +1,7 @@
-import exceptions.InvalidInputFormatException;
+package com.github.gigagoex.exercises;
+
+import com.github.gigagoex.exercises.Term;
+import com.github.gigagoex.exercises.exceptions.InvalidInputFormatException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

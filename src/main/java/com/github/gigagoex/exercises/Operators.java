@@ -1,3 +1,5 @@
+package com.github.gigagoex.exercises;
+
 import java.util.Collections;
 import java.util.HashSet;
 /**

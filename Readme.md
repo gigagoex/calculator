@@ -1,4 +1,4 @@
-This Calculator allows simple arithmetic operations.
+This com.github.gigagoex.exercises.Calculator allows simple arithmetic operations.
 
 You can add, substract, multiply or divide two numbers.
 Enter the term you want to solve after the keyword calc. You need to enter it in single quotes.

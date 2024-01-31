@@ -1,10 +1,13 @@
-import exceptions.InvalidInputFormatException;
+package com.github.gigagoex.exercises;
+
+import com.github.gigagoex.exercises.InputStringModifier;
+import com.github.gigagoex.exercises.exceptions.InvalidInputFormatException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class InputStringModifierTest {
     @Test
-    public void extractTermTest()throws Exception{
+    public void ExtractTermTest()throws Exception{
         String expected = "1+2+3";
         String actual = InputStringModifier.extractTerm("'1 + 2 + 3'");
         Assertions.assertEquals(expected, actual);

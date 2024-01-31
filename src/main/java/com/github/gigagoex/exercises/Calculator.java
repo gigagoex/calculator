@@ -1,10 +1,12 @@
-import exceptions.DividedByZeroException;
+package com.github.gigagoex.exercises;
+
+import com.github.gigagoex.exercises.exceptions.DividedByZeroException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * This class calculates the result of an expression provided as Term object.
- * The calculator solves the term in the order inherited from Operators and from left to right.
+ * This class calculates the result of an expression provided as com.github.gigagoex.exercises.Term object.
+ * The calculator solves the term in the order inherited from com.github.gigagoex.exercises.Operators and from left to right.
  * @author Maximilian Göckeler
  */
 public class Calculator extends Operators{
@@ -22,9 +24,9 @@ public class Calculator extends Operators{
     }
 
     /**
-     * gets operatorList and operandList from the Term and solves the term
+     * gets operatorList and operandList from the com.github.gigagoex.exercises.Term and solves the term
      * @see "calculate"
-     * @param term input Term
+     * @param term input com.github.gigagoex.exercises.Term
      * @return result
      * @throws DividedByZeroException forwards DividedByZeroException thrown by calculate to process in the main program
      */
@@ -107,7 +109,7 @@ public class Calculator extends Operators{
     }
 
     /**
-     * Casts the StringListArray obtained from Term into a DoubleListArray
+     * Casts the StringListArray obtained from com.github.gigagoex.exercises.Term into a DoubleListArray
      * @return ListArray of the operands as Double
      */
     private ArrayList<Double> stringListToDoubleList(){
